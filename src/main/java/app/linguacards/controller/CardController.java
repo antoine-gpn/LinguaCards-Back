@@ -1,12 +1,16 @@
 package app.linguacards.controller;
 import app.linguacards.dto.CardUpdateRequest;
 import app.linguacards.model.Card;
+import app.linguacards.repository.CardRepository;
 import app.linguacards.service.CardService;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +19,8 @@ public class CardController {
 
     @Autowired
     private CardService cardService;
+    @Autowired
+    private CardRepository cardRepository;
 
     @GetMapping("")
     public List<Card> getAllCards(){
@@ -22,7 +28,7 @@ public class CardController {
     }
 
     @GetMapping("{id}")
-    public Optional<Card> getCardById(@PathVariable Integer id){
+    public Optional<Card> getCardById(@PathVariable String id){
         return this.cardService.getCardById(id);
     }
 
@@ -32,12 +38,12 @@ public class CardController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteCardById(@PathVariable Integer id){
+    public void deleteCardById(@PathVariable String id){
         this.cardService.deleteCardById(id);
     }
 
     @PutMapping("/update/{id}")
-    public void updateCard(@PathVariable Integer id, @RequestBody CardUpdateRequest updateRequest) {
+    public void updateCard(@PathVariable String id, @RequestBody CardUpdateRequest updateRequest) {
         boolean updated = cardService.updateCardById(id, updateRequest.getFront_text(), updateRequest.getBack_text(), updateRequest.getScore());
 
         if (!updated) {
@@ -46,11 +52,26 @@ public class CardController {
     }
 
     @PutMapping("/updateScore/{id}")
-    public void updateCardScore(@PathVariable Integer id, @RequestBody CardUpdateRequest updateRequest) {
+    public void updateCardScore(@PathVariable String id, @RequestBody CardUpdateRequest updateRequest) {
         boolean updated = cardService.updateCardScore(id, updateRequest.getScore());
 
         if (!updated) {
             throw new RuntimeException("La mise à jour a échoué pour la carte avec id : " + id);
         }
+    }
+
+    @GetMapping("/stats")
+    public Map<String, Long> getScoreStats() {
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("to learn", cardService.countToLearn());
+        stats.put("learning", cardService.countLearning());
+        stats.put("learned", cardService.countLearned());
+        return stats;
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Card> addCard(@RequestBody Card newCard){
+        Card savedCard = this.cardRepository.save(newCard);
+        return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
     }
 }

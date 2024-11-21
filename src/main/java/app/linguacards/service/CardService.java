@@ -18,7 +18,7 @@ public class CardService {
         return cardRepository.findByUser_id(user_id);
     }
 
-    public Optional<Card> getCardById(Integer id){
+    public Optional<Card> getCardById(String id){
         return cardRepository.findById(id);
     }
 
@@ -26,11 +26,11 @@ public class CardService {
         return cardRepository.findByScoreLessThanAndUser_id(5, id);
     }
 
-    public void deleteCardById(Integer id){
+    public void deleteCardById(String id){
         cardRepository.deleteById(id);
     }
 
-    public boolean updateCardById(Integer id, String front_text, String back_text, Integer score) {
+    public boolean updateCardById(String id, String front_text, String back_text, Integer score) {
         Card card = cardRepository.findById(id).orElse(null);
         if (card != null) {
 
@@ -44,7 +44,7 @@ public class CardService {
         return false;
     }
 
-    public boolean updateCardScore(Integer id, Integer score) {
+    public boolean updateCardScore(String id, Integer score) {
         Card card = cardRepository.findById(id).orElse(null);
         if (card != null) {
 
@@ -53,6 +53,18 @@ public class CardService {
             return true;
         }
         return false;
+    }
+
+    public long countToLearn() {
+        return cardRepository.countByScoreBetween0And5();
+    }
+
+    public long countLearning() {
+        return cardRepository.countByScoreBetween(5, 11);
+    }
+
+    public long countLearned() {
+        return cardRepository.countByScoreGreaterThan(10);
     }
 
 }

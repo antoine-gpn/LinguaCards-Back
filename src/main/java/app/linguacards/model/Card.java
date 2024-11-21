@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Card {
 
     @Id
-    private Integer id;
+    private String id;
     private Integer user_id;
     private String front_text;
     private String back_text;
