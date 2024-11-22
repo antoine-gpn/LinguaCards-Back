@@ -1,5 +1,8 @@
 package app.linguacards.controller;
 
+import app.linguacards.model.Card;
+import app.linguacards.model.User;
+import app.linguacards.repository.UserRepository;
 import app.linguacards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,8 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     /*@Autowired
     private AuthenticationManager authenticationManager;
@@ -37,16 +42,13 @@ public class AuthController {
     }*/
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        boolean isAuthenticated = userService.login(username, password);
+    public User login(@RequestParam String username, @RequestParam String password) {
+        return userService.login(username, password);
+    }
 
-        Map<String, String> response = new HashMap<>();
-        if (isAuthenticated) {
-            response.put("message", "Login successful");
-        } else {
-            response.put("message", "Invalid credentials");
-        }
-        return ResponseEntity.ok(response);
+    @PostMapping("/register")
+    public User register(@RequestBody User newUser) {
+        return this.userRepository.save(newUser);
     }
 
     @GetMapping("/logout")

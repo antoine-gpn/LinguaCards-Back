@@ -14,7 +14,7 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public List<Card> getAllCardsByUser(Integer user_id){
+    public List<Card> getAllCardsByUser(String user_id){
         return cardRepository.findByUser_id(user_id);
     }
 
@@ -22,7 +22,7 @@ public class CardService {
         return cardRepository.findById(id);
     }
 
-    public List<Card> getLearningCards(Integer id){
+    public List<Card> getLearningCards(String id){
         return cardRepository.findByScoreLessThanAndUser_id(5, id);
     }
 
@@ -55,16 +55,16 @@ public class CardService {
         return false;
     }
 
-    public long countToLearn() {
-        return cardRepository.countByScoreBetween0And5();
+    public long countToLearn(String user_id) {
+        return cardRepository.countByScoreBetween0And5(user_id);
     }
 
-    public long countLearning() {
-        return cardRepository.countByScoreBetween(5, 11);
+    public long countLearning(String user_id) {
+        return cardRepository.countByScoreBetweenAndUser_id(5, 11, user_id);
     }
 
-    public long countLearned() {
-        return cardRepository.countByScoreGreaterThan(10);
+    public long countLearned(String user_id) {
+        return cardRepository.countByScoreGreaterThanAndUser_id(10, user_id);
     }
 
 }

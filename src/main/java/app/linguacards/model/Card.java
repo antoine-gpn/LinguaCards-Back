@@ -12,7 +12,7 @@ public class Card {
 
     @Id
     private String id;
-    private Integer user_id;
+    private String user_id;
     private String front_text;
     private String back_text;
     private Integer score;

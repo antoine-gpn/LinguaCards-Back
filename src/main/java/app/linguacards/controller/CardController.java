@@ -22,9 +22,9 @@ public class CardController {
     @Autowired
     private CardRepository cardRepository;
 
-    @GetMapping("")
-    public List<Card> getAllCards(){
-        return this.cardService.getAllCardsByUser(1);
+    @GetMapping("/user/{id}")
+    public List<Card> getAllCards(@PathVariable String id){
+        return this.cardService.getAllCardsByUser(id);
     }
 
     @GetMapping("{id}")
@@ -33,7 +33,7 @@ public class CardController {
     }
 
     @GetMapping("{user_id}/learning")
-    public List<Card> getLearningCards(@PathVariable Integer user_id){
+    public List<Card> getLearningCards(@PathVariable String user_id){
         return this.cardService.getLearningCards(user_id);
     }
 
@@ -60,12 +60,12 @@ public class CardController {
         }
     }
 
-    @GetMapping("/stats")
-    public Map<String, Long> getScoreStats() {
+    @GetMapping("/stats/{id}")
+    public Map<String, Long> getScoreStats(@PathVariable String id) {
         Map<String, Long> stats = new HashMap<>();
-        stats.put("to learn", cardService.countToLearn());
-        stats.put("learning", cardService.countLearning());
-        stats.put("learned", cardService.countLearned());
+        stats.put("to learn", cardService.countToLearn(id));
+        stats.put("learning", cardService.countLearning(id));
+        stats.put("learned", cardService.countLearned(id));
         return stats;
     }
 
