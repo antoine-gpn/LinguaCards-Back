@@ -30,13 +30,14 @@ public class CardService {
         cardRepository.deleteById(id);
     }
 
-    public boolean updateCardById(String id, String front_text, String back_text, Integer score) {
+    public boolean updateCardById(String id, String front_text, String back_text, Integer score, String image) {
         Card card = cardRepository.findById(id).orElse(null);
         if (card != null) {
 
             if (front_text != null) card.setFront_text(front_text);
             if (back_text != null) card.setBack_text(back_text);
             if (score != null) card.setScore(score);
+            if (image != null) card.setImage(image);
 
             cardRepository.save(card);
             return true;

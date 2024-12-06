@@ -15,15 +15,19 @@ public class Card {
     private String user_id;
     private String front_text;
     private String back_text;
+    private String image;
     private Integer score;
 
     public Card(){
 
     }
 
-    public Card(String front_text, String back_text){
+    public Card(String user_id, String front_text, String back_text, int score, String image){
+        this.user_id = user_id;
         this.front_text = front_text;
         this.back_text = back_text;
+        this.score = score;
+        this.image = image;
     }
 
 }

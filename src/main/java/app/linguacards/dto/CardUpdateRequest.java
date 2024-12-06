@@ -9,5 +9,6 @@ public class CardUpdateRequest {
     private String front_text;
     private String back_text;
     private Integer score;
+    private String image;
 
 }
