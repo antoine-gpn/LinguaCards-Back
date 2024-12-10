@@ -42,6 +42,11 @@ public class CardController {
         return this.cardService.getLearningCards(user_id);
     }
 
+    @GetMapping("cardsFilter/{id}/{select}/{input}")
+    public List<Card> getCardsByFilter(@PathVariable String id, @PathVariable String select, @PathVariable String input){
+        return this.cardService.getCardsByFilter(id, input, select);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteCardById(@PathVariable String id){
         this.cardService.deleteCardById(id);

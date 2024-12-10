@@ -68,4 +68,33 @@ public class CardService {
         return cardRepository.countByScoreGreaterThanAndUser_id(10, user_id);
     }
 
+    public List<Card> getCardsByFilter(String id, String input, String select){
+        Integer minScore = null;
+        Integer maxScore = null;
+
+        if(input.equals("null")){
+            input = "";
+        }
+
+        if(!select.equals("All")){
+            switch (select) {
+                case "To learn":
+                    minScore = 0;
+                    maxScore = 5;
+                    return this.cardRepository.findByUserIdAndScoreRangeAndText(id, minScore, maxScore, input);
+                case "Learning":
+                    minScore = 5;
+                    maxScore = 10;
+                    return this.cardRepository.findByUserIdAndScoreRangeAndText(id, minScore, maxScore, input);
+                case "Learned":
+                    minScore = 11;
+                    return this.cardRepository.findByUserIdAndMinScoreAndText(id, minScore, input);
+            }
+        }else{
+            return this.cardRepository.findByUserIdAndText(id, input);
+        }
+
+        return null;
+    }
+
 }
